@@ -2,171 +2,165 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Gestión Pan Piñita - Fernando Araujo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Pan Piñita</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { background-color: #fff1f2; -webkit-tap-highlight-color: transparent; }
-        .card-shadow { box-shadow: 0 10px 25px -5px rgba(225, 29, 72, 0.1); }
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-        input[type=number] { -moz-appearance: textfield; }
-    </style>
 </head>
-<body class="p-4 md:p-8 font-sans text-slate-800 flex flex-col items-center">
+<body class="p-4 md:p-8 bg-slate-50 font-sans">
 
-    <main class="max-w-lg w-full">
-        <header class="bg-rose-600 rounded-2xl p-6 text-white shadow-lg flex justify-between items-center mb-6 border-b-4 border-rose-800">
-            <div>
-                <h1 class="text-2xl font-black uppercase tracking-tight">Pan Piñita</h1>
-                <p class="text-rose-100 text-[10px] font-bold uppercase tracking-widest italic">Producción Dulce - Fernando Araujo</p>
-            </div>
-            <button onclick="verificarAcceso()" class="bg-white/10 p-2 rounded-full hover:bg-white/20 border border-white/20">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-            </button>
-        </header>
-
-        <div class="bg-white rounded-2xl card-shadow border border-rose-50 p-6 mb-6">
-            
-            <div id="settings-panel" class="hidden bg-rose-50/50 p-4 rounded-xl border-2 border-dashed border-rose-100 mb-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-[10px] font-black text-rose-400 uppercase tracking-widest">Precios base por Gramo ($)</h3>
-                    <button onclick="cerrarAjustes()" class="text-rose-600 text-[10px] font-bold uppercase">Cerrar</button>
-                </div>
-                <div id="prices-editor" class="grid grid-cols-1 gap-2 mb-4"></div>
-                <button onclick="savePrices()" class="w-full bg-rose-600 text-white font-bold py-2 rounded-lg text-xs shadow-md">ACTUALIZAR MAESTRO</button>
-            </div>
-
-            <div class="bg-rose-50/30 p-4 rounded-xl border border-rose-100 mb-6">
-                <label class="text-[10px] font-bold text-rose-900 uppercase block mb-2 text-center tracking-tighter">Cantidad de Piñitas a Hornear</label>
-                <input type="number" id="cantidadPanes" value="1" min="0" oninput="calcular()" class="w-full bg-white p-3 rounded-lg border border-rose-200 outline-none text-3xl font-black text-center text-rose-900 shadow-inner focus:ring-2 focus:ring-rose-500">
-            </div>
-
-            <table class="w-full mb-6">
-                <thead>
-                    <tr class="text-rose-300 text-[9px] uppercase border-b border-rose-50">
-                        <th class="py-2 text-left">Ingrediente</th>
-                        <th class="py-2 text-right">Peso (g)</th>
-                        <th class="py-2 text-right">Costo ($)</th>
-                    </tr>
-                </thead>
-                <tbody id="tabla-body" class="text-sm"></tbody>
-                <tfoot class="border-t-2 border-rose-100">
-                    <tr class="bg-rose-50/30">
-                        <td class="p-3 font-bold text-xs uppercase text-rose-500">Peso Total Masa</td>
-                        <td id="total-gramos" colspan="2" class="p-3 text-right font-black text-lg text-rose-900">0 g</td>
-                    </tr>
-                    <tr class="bg-rose-700 text-white">
-                        <td class="p-3 font-bold text-xs uppercase rounded-l-xl">Costo Total Insumos</td>
-                        <td id="total-costo" colspan="2" class="p-3 text-right font-black text-xl rounded-r-xl">$ 0,00</td>
-                    </tr>
-                </tfoot>
-            </table>
-
-            <button onclick="copyToClipboard()" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-4 rounded-xl text-xs shadow-lg transition-all active:scale-95 uppercase tracking-widest flex items-center justify-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" /><path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H5a2 2 0 01-2-2V5z" /></svg>
-                Copiar Lista de Pesos
-            </button>
+    <div class="max-w-lg mx-auto bg-white rounded-[2rem] overflow-hidden shadow-2xl border border-slate-100">
+        
+        <div class="bg-gradient-to-r from-amber-600 to-orange-500 p-6 text-center">
+            <h2 class="text-xl font-black text-white uppercase tracking-widest">
+                Pan Piñita
+            </h2>
+            <p class="text-[9px] text-orange-100 font-bold uppercase mt-1 tracking-[0.2em]">
+                Sistema de Gestión - Fernando Araujo
+            </p>
         </div>
 
-        <footer class="text-center pb-12">
-            <a href="https://loep1039.github.io/mi-panaderia/" class="inline-flex items-center gap-2 text-rose-600 hover:text-rose-800 font-bold text-sm transition-all group">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-                Regresar al Menú Principal
-            </a>
-        </footer>
-    </main>
+        <div class="p-6">
+            <div class="mb-8">
+                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-2 text-center tracking-widest">Cantidad de Panes a Producir</label>
+                <input type="number" id="cantidadPanes" value="1" oninput="calcular()" 
+                       class="w-full p-4 bg-slate-50 border-2 border-transparent focus:border-amber-400 rounded-2xl outline-none font-black text-center text-3xl text-slate-700 transition-all">
+            </div>
 
-    <div id="toast" class="fixed bottom-10 bg-slate-900 text-white px-6 py-2 rounded-full text-[10px] font-bold opacity-0 transition-opacity pointer-events-none"></div>
+            <div class="grid grid-cols-2 gap-4 mb-8">
+                <div class="bg-amber-50/50 border border-amber-100 rounded-3xl p-4 text-center">
+                    <p class="text-[10px] uppercase font-bold text-amber-500 mb-1">Costo Insumos</p>
+                    <p id="costoTotal" class="text-2xl font-black text-amber-600">Cargando...</p>
+                </div>
+                <div class="bg-slate-50 border border-slate-100 rounded-3xl p-4 text-center">
+                    <p class="text-[10px] uppercase font-bold text-slate-400 mb-1">Masa Total</p>
+                    <p id="pesoTotalMasa" class="text-2xl font-black text-slate-700">0 gr</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-100 overflow-hidden mb-6">
+                <table class="w-full text-left">
+                    <thead class="bg-slate-50">
+                        <tr>
+                            <th class="pl-4 py-4 text-[10px] font-bold text-slate-400 uppercase">Ingrediente</th>
+                            <th class="pr-4 py-4 text-[10px] font-bold text-slate-400 uppercase text-right">Cantidad / Costo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaIngredientes" class="divide-y divide-slate-50">
+                    </tbody>
+                </table>
+            </div>
+
+            <button onclick="copiarWhatsApp()" 
+                    class="w-full bg-amber-600 hover:bg-amber-700 text-white font-black py-4 rounded-2xl uppercase text-[11px] tracking-widest transition-all shadow-lg shadow-amber-100 active:scale-95 flex items-center justify-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.94 3.659 1.437 5.63 1.438h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                </svg>
+                Copiar para WhatsApp
+            </button>
+        </div>
+    </div>
 
     <script>
-        const CLAVE = "1506";
-        const MASA_BASE = 81.8; // Masa total para 1 pan piñita
+        const URL_NUBE = "https://script.google.com/macros/s/AKfycbzl8cTzjvfo6emxsDCrhRSaGo2ImlLU2Mgiu8_NDiaW6dSQHw6wv4-XJLiq9QkXcP3oBg/exec"; 
+        let precios = {};
 
-        // Porcentajes del panadero basados en tu Tabla 17 (Harina 44g = 100%)
-        const receta = [
-            { n: "Harina", p: 100 }, { n: "Agua", p: 42.04 }, { n: "Levadura", p: 2.04 },
-            { n: "Sal", p: 0.22 }, { n: "Azúcar", p: 25.22 }, { n: "Mantequilla", p: 10 },
-            { n: "Huevo", p: 5 }, { n: "Vainilla", p: 0.68 }, { n: "Anís dulce", p: 0.45 }
-        ];
-
-        // Precios por gramo calculados de tu imagen
-        let precios = JSON.parse(localStorage.getItem('precios_pinita')) || {
-            "Harina": 0.00125, "Agua": 0, "Levadura": 0.01222, "Sal": 0,
-            "Azúcar": 0.00162, "Mantequilla": 0.00522, "Huevo": 0.00454,
-            "Vainilla": 0.00333, "Anís dulce": 0.015
-        };
-
-        function verificarAcceso() {
-            if (prompt("Ingresa clave administrativa:") === CLAVE) {
-                document.getElementById('settings-panel').classList.remove('hidden');
-                renderEditor();
-            }
+        function formatLatam(num, dec = 2) {
+            return new Intl.NumberFormat('de-DE', { minimumFractionDigits: dec, maximumFractionDigits: dec }).format(num);
         }
 
-        function cerrarAjustes() { document.getElementById('settings-panel').classList.add('hidden'); }
-
-        function renderEditor() {
-            const div = document.getElementById('prices-editor');
-            div.innerHTML = '';
-            for (let i in precios) {
-                div.innerHTML += `<div class="flex justify-between items-center bg-white p-2 rounded border border-rose-100">
-                    <span class="text-[10px] font-bold uppercase text-slate-400">${i}</span>
-                    <input type="number" step="0.000001" value="${precios[i]}" data-ing="${i}" class="p-input w-24 text-right text-xs font-bold text-rose-600 outline-none">
-                </div>`;
+        async function cargarPrecios() {
+            try {
+                const res = await fetch(URL_NUBE);
+                const data = await res.json();
+                precios = Object.keys(data).reduce((acc, key) => {
+                    let valor = String(data[key]).replace(/[$\s]/g, '').replace(',', '.');
+                    acc[key.toLowerCase().trim()] = parseFloat(valor) || 0;
+                    return acc;
+                }, {});
+                calcular();
+            } catch (e) { 
+                console.error("Error cargando precios");
+                document.getElementById('costoTotal').innerText = "Error";
             }
-        }
-
-        function savePrices() {
-            document.querySelectorAll('.p-input').forEach(i => precios[i.dataset.ing] = parseFloat(i.value));
-            localStorage.setItem('precios_pinita', JSON.stringify(precios));
-            cerrarAjustes(); calcular(); showToast("COSTOS DE PIÑITA ACTUALIZADOS");
         }
 
         function calcular() {
-            const cant = parseInt(document.getElementById('cantidadPanes').value) || 0;
-            const masaTotal = cant * MASA_BASE;
-            // La suma de los porcentajes es aprox 185.65%
-            const harinaBase = masaTotal / 1.8565; 
-            
-            let totalC = 0;
-            const body = document.getElementById('tabla-body');
-            body.innerHTML = '';
+            const unidades = parseFloat(document.getElementById('cantidadPanes').value) || 0;
+            const harinaPorPan = 44; // Dato de tu Excel para Pan Piñita
+            const harinaTotal = harinaPorPan * unidades;
+
+            // Receta basada en 44g de harina = 100%
+            const receta = [
+                { nombre: "Harina", pct: 100 },
+                { nombre: "Agua", pct: 42.05 },
+                { nombre: "Levadura", pct: 2.05 },
+                { nombre: "Sal", pct: 0.23 },
+                { nombre: "Azúcar", pct: 25.23 },
+                { nombre: "Mantequilla", pct: 10.0 },
+                { nombre: "Huevo", pct: 5.0 },
+                { nombre: "Vainilla", pct: 0.68 },
+                { nombre: "Anis dulce", pct: 0.45 }
+            ];
+
+            let costoAcumulado = 0;
+            let masaTotal = 0;
+            let html = "";
 
             receta.forEach(ing => {
-                const g = (harinaBase * ing.p) / 100;
-                const c = g * (precios[ing.n] || 0);
-                totalC += c;
-                body.innerHTML += `<tr class="border-b border-rose-50/50">
-                    <td class="py-3 font-semibold text-slate-600">${ing.n}</td>
-                    <td class="py-3 text-right font-bold text-rose-900">${Math.round(g)} g</td>
-                    <td class="py-3 text-right text-rose-500 font-mono text-[11px]">$ ${c.toLocaleString('es-VE',{minimumFractionDigits:3})}</td>
-                </tr>`;
+                const cantidadGramos = harinaTotal * (ing.pct / 100);
+                const precioPorKilo = precios[ing.nombre.toLowerCase().trim()] || 0;
+                const subtotal = (cantidadGramos * precioPorKilo) / 1000;
+                
+                costoAcumulado += subtotal;
+                masaTotal += cantidadGramos;
+
+                html += `
+                    <tr>
+                        <td class="pl-4 py-4 font-bold text-slate-700 text-[13px]">
+                            ${ing.nombre} <span class="text-[9px] text-slate-300 ml-1">(${ing.pct}%)</span>
+                        </td>
+                        <td class="pr-4 py-4 text-right">
+                            <div class="text-[13px] font-black text-slate-900">${formatLatam(cantidadGramos, 1)} gr</div>
+                            <div class="text-[10px] font-bold text-amber-500">$ ${formatLatam(subtotal, 3)}</div>
+                        </td>
+                    </tr>`;
             });
 
-            document.getElementById('total-gramos').innerText = Math.round(masaTotal).toLocaleString('es-VE') + ' g';
-            document.getElementById('total-costo').innerText = '$ ' + totalC.toLocaleString('es-VE',{minimumFractionDigits:2});
+            document.getElementById('costoTotal').innerText = `$ ${formatLatam(costoAcumulado, 2)}`;
+            document.getElementById('pesoTotalMasa').innerText = `${formatLatam(masaTotal, 0)} gr`;
+            document.getElementById('listaIngredientes').innerHTML = html;
         }
 
-        function showToast(m) { 
-            const t = document.getElementById('toast'); t.innerText = m; t.style.opacity = '1';
-            setTimeout(() => t.style.opacity = '0', 2500);
+        function copiarWhatsApp() {
+            const unidades = document.getElementById('cantidadPanes').value;
+            const costoTotal = document.getElementById('costoTotal').innerText;
+            const masaTotal = document.getElementById('pesoTotalMasa').innerText;
+            const harinaTotal = 44 * unidades;
+            const receta = [
+                { nombre: "Harina", pct: 100 }, { nombre: "Agua", pct: 42.05 }, { nombre: "Levadura", pct: 2.05 },
+                { nombre: "Sal", pct: 0.23 }, { nombre: "Azúcar", pct: 25.23 }, { nombre: "Mantequilla", pct: 10.0 },
+                { nombre: "Huevo", pct: 5.0 }, { nombre: "Vainilla", pct: 0.68 }, { nombre: "Anis dulce", pct: 0.45 }
+            ];
+
+            let listaIngredientes = "";
+            receta.forEach(ing => {
+                const gramos = (harinaTotal * (ing.pct / 100)).toFixed(1);
+                listaIngredientes += `${ing.nombre}: ${formatLatam(gramos, 1)}g\n`;
+            });
+
+            const texto = `📋 PAN PIÑITA - ${costoTotal}\n` +
+                          `MASA TOTAL: ${masaTotal}\n` +
+                          `---\n` +
+                          listaIngredientes +
+                          `---\n` +
+                          `_Sistema de Gestión - Fernando Araujo_`;
+
+            navigator.clipboard.writeText(texto).then(() => {
+                alert("¡Resumen de Pan Piñita copiado!");
+            });
         }
 
-        async function copyToClipboard() {
-            const c = document.getElementById('cantidadPanes').value;
-            const m = document.getElementById('total-gramos').innerText;
-            const cost = document.getElementById('total-costo').innerText;
-            let text = `🍩 PAN PIÑITA - Fernando Araujo\nProducción: ${c} unidades\nMasa Total: ${m}\nCosto Insumos: ${cost}\n---\n`;
-            document.querySelectorAll('#tabla-body tr').forEach(tr => text += `${tr.cells[0].innerText}: ${tr.cells[1].innerText}\n`);
-            await navigator.clipboard.writeText(text);
-            showToast("PESOS COPIADOS PARA WHATSAPP");
-        }
-
-        window.onload = calcular;
+        window.onload = cargarPrecios;
     </script>
 </body>
 </html>
