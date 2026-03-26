@@ -10,11 +10,11 @@
 
     <div class="max-w-lg mx-auto bg-white rounded-[2rem] overflow-hidden shadow-2xl border border-slate-100">
         
-        <div class="bg-gradient-to-r from-rose-600 to-pink-500 p-6 text-center">
+        <div class="bg-gradient-to-r from-violet-700 to-purple-500 p-6 text-center">
             <h2 class="text-xl font-black text-white uppercase tracking-widest">
                 Pan Piñita
             </h2>
-            <p class="text-[9px] text-rose-100 font-bold uppercase mt-1 tracking-[0.2em]">
+            <p class="text-[9px] text-violet-100 font-bold uppercase mt-1 tracking-[0.2em]">
                 Sistema de Gestión - Fernando Araujo
             </p>
         </div>
@@ -23,13 +23,13 @@
             <div class="mb-8">
                 <label class="block text-[10px] font-bold text-slate-400 uppercase mb-2 text-center tracking-widest">Cantidad de Panes a Producir</label>
                 <input type="number" id="cantidadPanes" value="1" oninput="calcular()" 
-                       class="w-full p-4 bg-slate-50 border-2 border-transparent focus:border-rose-400 rounded-2xl outline-none font-black text-center text-3xl text-slate-700 transition-all">
+                       class="w-full p-4 bg-slate-50 border-2 border-transparent focus:border-violet-400 rounded-2xl outline-none font-black text-center text-3xl text-slate-700 transition-all">
             </div>
 
             <div class="grid grid-cols-2 gap-4 mb-8">
-                <div class="bg-rose-50/50 border border-rose-100 rounded-3xl p-4 text-center">
-                    <p class="text-[10px] uppercase font-bold text-rose-500 mb-1">Costo Insumos</p>
-                    <p id="costoTotal" class="text-2xl font-black text-rose-600">Cargando...</p>
+                <div class="bg-violet-50/50 border border-violet-100 rounded-3xl p-4 text-center">
+                    <p class="text-[10px] uppercase font-bold text-violet-500 mb-1">Costo Insumos</p>
+                    <p id="costoTotal" class="text-2xl font-black text-violet-600">Cargando...</p>
                 </div>
                 <div class="bg-slate-50 border border-slate-100 rounded-3xl p-4 text-center">
                     <p class="text-[10px] uppercase font-bold text-slate-400 mb-1">Masa Total</p>
@@ -50,7 +50,7 @@
             </div>
 
             <button onclick="copiarWhatsApp()" 
-                    class="w-full bg-rose-600 hover:bg-rose-700 text-white font-black py-4 rounded-2xl uppercase text-[11px] tracking-widest transition-all shadow-lg shadow-rose-100 active:scale-95 flex items-center justify-center gap-3">
+                    class="w-full bg-violet-600 hover:bg-violet-700 text-white font-black py-4 rounded-2xl uppercase text-[11px] tracking-widest transition-all shadow-lg shadow-violet-100 active:scale-95 flex items-center justify-center gap-3">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.94 3.659 1.437 5.63 1.438h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                 </svg>
@@ -60,7 +60,7 @@
     </div>
 
     <script>
-        const URL_NUBE = "https://script.google.com/macros/s/AKfycbzl8cTzjvfo6emxsDCrhRSaGo2ImlLU2Mgiu8_NDiaW6dSQHw6wv4-XJLiq9QkXcP3oBg/exec"; // RECUERDA: Al hacer la nueva implementación, copia el nuevo URL que te dé Google.
+        const URL_NUBE = "https://script.google.com/macros/s/AKfycbzl8cTzjvfo6emxsDCrhRSaGo2ImlLU2Mgiu8_NDiaW6dSQHw6wv4-XJLiq9QkXcP3oBg/exec"; 
         let precios = {};
 
         function formatLatam(num, dec = 2) {
@@ -70,12 +70,7 @@
         async function cargarPrecios() {
             try {
                 const res = await fetch(URL_NUBE);
-                const data = await res.json();
-                precios = Object.keys(data).reduce((acc, key) => {
-                    let valor = String(data[key]).replace(/[$\s]/g, '').replace(',', '.');
-                    acc[key.toLowerCase().trim()] = parseFloat(valor) || 0;
-                    return acc;
-                }, {});
+                precios = await res.json();
                 calcular();
             } catch (e) { 
                 document.getElementById('costoTotal').innerText = "Error";
@@ -86,7 +81,6 @@
             const unidades = parseFloat(document.getElementById('cantidadPanes').value) || 0;
             const harinaTotal = 44 * unidades;
 
-            // RECETA AJUSTADA: Cambiado "Mantequilla" por "Margarina"
             const receta = [
                 { nombre: "Harina", pct: 100 },
                 { nombre: "Agua", pct: 42.05 },
@@ -113,12 +107,12 @@
 
                 html += `
                     <tr>
-                        <td class="pl-4 py-4 font-bold text-slate-700 text-[13px]">
-                            ${ing.nombre} <span class="text-[9px] text-slate-300 ml-1">(${ing.pct}%)</span>
+                        <td class="pl-4 py-4 font-bold text-slate-700 text-[13px] uppercase">
+                            ${ing.nombre}
                         </td>
                         <td class="pr-4 py-4 text-right">
                             <div class="text-[13px] font-black text-slate-900">${formatLatam(cantidadGramos, 1)} gr</div>
-                            <div class="text-[10px] font-bold text-rose-500">$ ${formatLatam(subtotal, 3)}</div>
+                            <div class="text-[10px] font-bold text-violet-500">$ ${formatLatam(subtotal, 4)}</div>
                         </td>
                     </tr>`;
             });
@@ -131,30 +125,8 @@
         function copiarWhatsApp() {
             const unidades = document.getElementById('cantidadPanes').value;
             const costoTotal = document.getElementById('costoTotal').innerText;
-            const masaTotal = document.getElementById('pesoTotalMasa').innerText;
-            const harinaTotal = 44 * unidades;
-            const receta = [
-                { nombre: "Harina", pct: 100 }, { nombre: "Agua", pct: 42.05 }, { nombre: "Levadura", pct: 2.05 },
-                { nombre: "Sal", pct: 0.23 }, { nombre: "Azúcar", pct: 25.23 }, { nombre: "Margarina", pct: 10.0 },
-                { nombre: "Huevo", pct: 5.0 }, { nombre: "Vainilla", pct: 0.68 }, { nombre: "Anis dulce", pct: 0.45 }
-            ];
-
-            let listaIngredientes = "";
-            receta.forEach(ing => {
-                const gramos = (harinaTotal * (ing.pct / 100)).toFixed(1);
-                listaIngredientes += `${ing.nombre}: ${formatLatam(gramos, 1)}g\n`;
-            });
-
-            const texto = `📋 PAN PIÑITA - ${costoTotal}\n` +
-                          `MASA TOTAL: ${masaTotal}\n` +
-                          `---\n` +
-                          listaIngredientes +
-                          `---\n` +
-                          `_Sistema de Gestión - Fernando Araujo_`;
-
-            navigator.clipboard.writeText(texto).then(() => {
-                alert("¡Resumen de Pan Piñita copiado!");
-            });
+            const texto = `📋 PAN PIÑITA (${unidades} unid.) - ${costoTotal}\n_Sistema de Gestión - Fernando Araujo_`;
+            navigator.clipboard.writeText(texto).then(() => alert("Copiado!"));
         }
 
         window.onload = cargarPrecios;
