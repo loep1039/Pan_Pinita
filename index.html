@@ -29,7 +29,7 @@
             <div class="grid grid-cols-2 gap-4 mb-8">
                 <div class="bg-violet-50/50 border border-violet-100 rounded-3xl p-4 text-center">
                     <p class="text-[10px] uppercase font-bold text-violet-500 mb-1">Costo Insumos</p>
-                    <p id="costoTotal" class="text-2xl font-black text-violet-600">Cargando...</p>
+                    <p id="costoTotal" class="text-2xl font-black text-violet-600">Conectando...</p>
                 </div>
                 <div class="bg-slate-50 border border-slate-100 rounded-3xl p-4 text-center">
                     <p class="text-[10px] uppercase font-bold text-slate-400 mb-1">Masa Total</p>
@@ -60,8 +60,10 @@
     </div>
 
     <script>
+        // REEMPLAZA ESTO con tu URL después de publicar como "Cualquier persona"
         const URL_NUBE = "https://script.google.com/macros/s/AKfycbzl8cTzjvfo6emxsDCrhRSaGo2ImlLU2Mgiu8_NDiaW6dSQHw6wv4-XJLiq9QkXcP3oBg/exec"; 
         let precios = {};
+        let listaActualWhatsApp = "";
 
         function formatLatam(num, dec = 2) {
             return new Intl.NumberFormat('de-DE', { minimumFractionDigits: dec, maximumFractionDigits: dec }).format(num);
@@ -70,16 +72,18 @@
         async function cargarPrecios() {
             try {
                 const res = await fetch(URL_NUBE);
+                if (!res.ok) throw new Error("No se pudo conectar");
                 precios = await res.json();
                 calcular();
             } catch (e) { 
-                document.getElementById('costoTotal').innerText = "Error";
+                document.getElementById('costoTotal').innerText = "Error Enlace";
             }
         }
 
         function calcular() {
             const unidades = parseFloat(document.getElementById('cantidadPanes').value) || 0;
-            const harinaTotal = 44 * unidades;
+            const harinaBase = 44; // gramos por pan segun tu tabla
+            const harinaTotal = harinaBase * unidades;
 
             const receta = [
                 { nombre: "Harina", pct: 100 },
@@ -87,7 +91,7 @@
                 { nombre: "Levadura", pct: 2.05 },
                 { nombre: "Sal", pct: 0.23 },
                 { nombre: "Azúcar", pct: 25.23 },
-                { nombre: "Margarina", pct: 10.0 },
+                { nombre: "Margarina", pct: 10.0 }, // Coincide con tu Excel
                 { nombre: "Huevo", pct: 5.0 },
                 { nombre: "Vainilla", pct: 0.68 },
                 { nombre: "Anis dulce", pct: 0.45 }
@@ -96,10 +100,12 @@
             let costoAcumulado = 0;
             let masaTotal = 0;
             let html = "";
+            listaActualWhatsApp = "";
 
             receta.forEach(ing => {
                 const cantidadGramos = harinaTotal * (ing.pct / 100);
-                const precioPorKilo = precios[ing.nombre.toLowerCase().trim()] || 0;
+                const nombreLimpio = ing.nombre.toLowerCase().trim();
+                const precioPorKilo = precios[nombreLimpio] || 0;
                 const subtotal = (cantidadGramos * precioPorKilo) / 1000;
                 
                 costoAcumulado += subtotal;
@@ -107,14 +113,14 @@
 
                 html += `
                     <tr>
-                        <td class="pl-4 py-4 font-bold text-slate-700 text-[13px] uppercase">
-                            ${ing.nombre}
-                        </td>
+                        <td class="pl-4 py-4 font-bold text-slate-700 text-[13px] uppercase">${ing.nombre}</td>
                         <td class="pr-4 py-4 text-right">
                             <div class="text-[13px] font-black text-slate-900">${formatLatam(cantidadGramos, 1)} gr</div>
                             <div class="text-[10px] font-bold text-violet-500">$ ${formatLatam(subtotal, 4)}</div>
                         </td>
                     </tr>`;
+                
+                listaActualWhatsApp += `• ${ing.nombre}: ${formatLatam(cantidadGramos, 1)}g ($${formatLatam(subtotal, 3)})\n`;
             });
 
             document.getElementById('costoTotal').innerText = `$ ${formatLatam(costoAcumulado, 2)}`;
@@ -125,8 +131,17 @@
         function copiarWhatsApp() {
             const unidades = document.getElementById('cantidadPanes').value;
             const costoTotal = document.getElementById('costoTotal').innerText;
-            const texto = `📋 PAN PIÑITA (${unidades} unid.) - ${costoTotal}\n_Sistema de Gestión - Fernando Araujo_`;
-            navigator.clipboard.writeText(texto).then(() => alert("Copiado!"));
+            const masa = document.getElementById('pesoTotalMasa').innerText;
+            
+            const mensaje = `📋 *PAN PIÑITA* (${unidades} unidades)\n` +
+                          `💰 *Costo Total:* ${costoTotal}\n` +
+                          `⚖️ *Masa Total:* ${masa}\n\n` +
+                          `*Detalle de Insumos:*\n${listaActualWhatsApp}\n` +
+                          `_Sistema de Gestión - Fernando Araujo_`;
+
+            navigator.clipboard.writeText(mensaje).then(() => {
+                alert("¡Receta completa copiada para WhatsApp!");
+            });
         }
 
         window.onload = cargarPrecios;
