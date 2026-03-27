@@ -8,8 +8,8 @@
     <style>
         :root {
             /* ESQUEMA DE COLORES: NARANJA PARA PAN PIÑITA */
-            --primario-naranja: #e67e22; 
-            --naranja-oscuro: #d35400;
+            --primario-naranja: #f39c12; 
+            --naranja-oscuro: #e67e22;
             --fondo-gris: #f8faf9;
             --texto-oscuro: #1a202c;
             --blanco: #ffffff;
@@ -84,10 +84,10 @@
         .card-val.cost-val { color: var(--naranja-oscuro); }
 
         .qty-input-small {
-            width: 50px;
-            border: none;
-            background: #edf2f7;
-            border-radius: 5px;
+            width: 60px;
+            border: 2px solid var(--naranja-borde);
+            background: #ffffff;
+            border-radius: 8px;
             font-size: 1.2rem;
             font-weight: bold;
             color: var(--texto-oscuro);
@@ -179,12 +179,13 @@
 </div>
 
 <script>
-    const WEB_APP_URL = "<script src="https://gist.github.com/loep1039/0b9fbae05f40bcd16a9a883c5ef0b999.js"></script>";
+    // URL Corregida
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyK0o_LRZg2b75mrPzU63l6bPjFac01LWs3DA5tFVXJ3yR97DbBek1zEVD7JJySiDas/exec";
 
-    // Receta Pan Piñita (Harina base 44g por pan)
+    // Receta Pan Piñita (Datos extraídos de tu tabla)
     const RECETA = {
         nombre: "Pan Piñita",
-        harinaPorUnidad: 44.0,
+        harinaPorUnidad: 44.0, // Harina base por unidad
         items: [
             { nombre: "Harina", pct: 100.0, precioKg: 0 },
             { nombre: "Agua", pct: 42.0, precioKg: 0 },
@@ -211,11 +212,11 @@
                 }
             });
 
-            statusEl.innerHTML = '<i class="fas fa-check-circle"></i> Precios de Google Sheets activos';
+            statusEl.innerHTML = '<i class="fas fa-check-circle"></i> Precios sincronizados';
             statusEl.style.color = "#e67e22";
             calcular(); 
         } catch (error) {
-            statusEl.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Sin conexión (Precios en 0)';
+            statusEl.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error de conexión';
             statusEl.style.color = "#e53e3e";
             calcular();
         }
@@ -232,7 +233,7 @@
         RECETA.items.forEach(ing => {
             const gramos = (RECETA.harinaPorUnidad * panes) * (ing.pct / 100);
             
-            // LÓGICA ESPECIAL PARA HUEVOS (Divisor 1500)
+            // LÓGICA ESPECIAL PARA HUEVOS (Divisor 1500 corregido)
             let divisor = (ing.nombre === "Huevos") ? 1500 : 1000;
             const costo = (gramos / divisor) * ing.precioKg;
 
@@ -252,7 +253,7 @@
             `;
         });
 
-        document.getElementById('resMasa').innerText = `${masaTotal.toFixed(0)} g`;
+        document.getElementById('resMasa').innerText = `${masaTotal.toFixed(1)} g`;
         document.getElementById('resCosto').innerText = `$ ${costoTotal.toFixed(2)}`;
     }
 
@@ -262,6 +263,7 @@
         const costoTotalStr = document.getElementById('resCosto').innerText;
 
         let textoCopiar = `*${RECETA.nombre.toUpperCase()}* - *${costoTotalStr}*\n`;
+        textoCopiar += `CANTIDAD: ${panes} unidades\n`;
         textoCopiar += `MASA TOTAL: ${masaTotalStr}\n`;
         textoCopiar += `---\n`;
 
